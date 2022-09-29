@@ -52,7 +52,7 @@
                                 <br>
                                 <div class="form-group cover_photo_section d-none">
                                     <label for="cover_photo">Choose Cover Photo</label><br>
-                                     <input type="file" id="cover_photo" name="cover_photo" class="form-control">
+                                     <input type="file" id="cover_photo" name="cover_photo" class="form-control" accept="image/*">
                                 </div>
                            
                         </div>

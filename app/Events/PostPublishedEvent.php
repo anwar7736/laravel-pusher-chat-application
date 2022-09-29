@@ -34,6 +34,14 @@ class PostPublishedEvent implements ShouldBroadcast
     
     public function broadcastWith()
     {
+        $image_status = "";
+        if(isset($this->data['post_cover_photo']))
+        {
+            $image_status = "";
+        }
+        else{
+            $image_status = "d-none";
+        }
         $category_name = Category::whereId($this->data['category_id'])->pluck('category_name')->first();
         return [
             'user_id' => auth()->id(), 
@@ -41,6 +49,7 @@ class PostPublishedEvent implements ShouldBroadcast
             'data' => $this->data, 
             'category_name' => $category_name,
             'created_by' => auth()->user()->name,
+            'image_status' => $image_status,
         
         ];
     }

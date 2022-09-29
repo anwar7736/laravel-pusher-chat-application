@@ -10,6 +10,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class NotificationEvent implements ShouldBroadcast
 {
@@ -20,24 +21,30 @@ class NotificationEvent implements ShouldBroadcast
      *
      * @return void
      */
-    public $value;
-    public function __construct($value)
+    public $user_id;
+    public $message;
+    public $comments;
+
+    public function __construct($user_id, $message, $comments = "")
     {
-        $this->value = $value;
+        $this->user_id = $user_id;
+        $this->message = $message;
+        $this->comments = $comments;
     }
 
     public function broadcastOn()
     {
-        return new Channel('live-score.1');
+        return new Channel('post-status');
     }
     
     public function broadcastAs()
     {
-        return 'my-score';
+        return 'my-post';
     }
     
-    public function broadcastWhen()
+    public function broadcastWith()
     {
-        return $this->value > 0;
+        $user = User::whereId($this->user_id)->first();
+        return ['name' => $user->name, 'profile_photo' => $user->profile_photo, 'comments' => $this->comments, 'user_id' => $this->user_id, 'message' => $this->message];
     }
 }
